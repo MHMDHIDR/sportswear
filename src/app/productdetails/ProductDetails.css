@@ -1,0 +1,59 @@
+/* Spinner Animation */
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes slideInOut {
+    0% {
+      right: -100%;
+    }
+    10% {
+      right: 20px;
+    }
+    90% {
+      right: 20px;
+    }
+    100% {
+      right: -100%;
+    }
+  }
+  
+  /* Loading Styles */
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+  }
+  
+  .spinner {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
+  
+  /* Cart Message Animation */
+  .cart-message-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    animation: slideInOut 4s ease-out;
+  }
+  
