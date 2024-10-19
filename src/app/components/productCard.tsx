@@ -1,430 +1,206 @@
 "use client";
+import { useState } from "react";
+import { Lens } from "./lens";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartPlus, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import Link from "next/link";
 
-import React, { useState } from "react";
-import { FaHeart, FaCartPlus } from "react-icons/fa";
-
-interface Product {
-  image: string;
-  price: string;
+type Product = {
+  id: string; // Add an id field
+  title: string;
   description: string;
-  sizes: string[];
-  colors: string[];
-}
+  image: string;
+};
 
-interface ProductCardProps extends Product {
-  onAddToCart: (product: Product, quantity: number) => void;
-}
+type ProductCardProps = {
+  product: Product;
+  quantity: number; // Quantity state passed as prop
+  isFavorite: boolean; // Favorite state passed as prop
+  onQuantityChange: (newQuantity: number) => void; // Function to update quantity
+  onToggleFavorite: () => void; // Function to toggle favorite
+};
 
-const products: Product[] = [
-  {
-    image:
-      "https://assets.adidas.com/images/w_1880,f_auto,q_auto/4125cf575a4f420aa9390f8c42151e56_9366/HR3796_HM30.jpg",
-    price: "$99.99",
-    description: "Comfortable and stylish sneakers for everyday wear.",
-    sizes: ["7", "8", "9", "10"],
-    colors: ["Black", "White", "Red"]
-  },
-  {
-    image:
-      "https://assets.adidas.com/images/w_1880,f_auto,q_auto/3b4e98acec924a71afc9d85b06203c27_9366/IN9846_HM30.jpg",
-    price: "$79.99",
-    description: "High-quality leather boots for any occasion.",
-    sizes: ["8", "9", "10", "11"],
-    colors: ["Brown", "Black"]
-  },
-  {
-    image:
-      "https://en-ae.sssports.com/dw/image/v2/BDVB_PRD/on/demandware.static/-/Sites-akeneo-master-catalog/default/dwfa2cf3c7/sss/SSS2/A/D/I/F/0/SSS2_ADIF0699_4066765120410_2.jpg?sw=700&sh=700&sm=fit",
-    price: "$49.99",
-    description: "Durable backpack with multiple compartments.",
-    sizes: ["Small", "Medium", "Large"],
-    colors: ["Black", "Gray", "Blue"]
-  }
-];
+function ProductCard({ product, quantity, isFavorite, onQuantityChange, onToggleFavorite }: ProductCardProps) {
+  const [hovering, setHovering] = useState(false);
 
-const PRODUCTS_PER_PAGE = 6;
-
-const ProductCard: React.FC<ProductCardProps> = ({
-  image,
-  price,
-  description,
-  sizes,
-  colors,
-  onAddToCart
-}) => {
-  const [quantity, setQuantity] = useState<number>(1);
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
-  const [showCartMessage, setShowCartMessage] = useState<boolean>(false);
-
-  const handleFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
+  const handleAddToCart = () => {
+    console.log(`Added ${quantity} of ${product.title} to cart`);
   };
 
-  const handleCartClick = () => {
-    onAddToCart({ image, price, description, sizes, colors }, quantity);
-    setShowCartMessage(true);
-    setTimeout(() => setShowCartMessage(false), 4000);
-  };
-
-  const handleQuantityChange = (operation: "increased" | "decreased") => {
-    setQuantity((prevQuantity) =>
-      operation === "increased"
-        ? prevQuantity + 1
-        : Math.max(1, prevQuantity - 1)
-    );
+  const handleNavigateToDetails = () => {
+    // Store product details in local storage
+    localStorage.setItem("selectedProduct", JSON.stringify(product));
   };
 
   return (
-    <div style={styles.card}>
-      <a
-        href='/productdetails'
-        target='_blank'
-        rel='noopener noreferrer'
-        style={styles.link}
-      >
-        <img src={image} alt='Product Image' style={styles.image} />
-      </a>
-      <div style={styles.details}>
-        <h2 style={styles.price}>{price}</h2>
-        <p style={styles.description}>{description}</p>
-        <div style={styles.actions}>
-          <button
-            style={{ ...styles.iconButton, color: isFavorite ? "red" : "gray" }}
-            onClick={handleFavoriteClick}
-            aria-label={
-              isFavorite ? "Remove from Favorites" : "Add to Favorites"
-            }
-          >
-            <FaHeart size={24} />
-          </button>
-          <button
-            style={styles.iconButton}
-            onClick={handleCartClick}
-            aria-label='Add to Cart'
-          >
-            <FaCartPlus size={24} color='green' />
-          </button>
-        </div>
-        <div style={styles.quantity}>
-          <button
-            style={styles.quantityButton}
-            onClick={() => handleQuantityChange("decreased")}
-            aria-label='Decrease quantity'
-          >
-            -
-          </button>
-          <span style={styles.quantityDisplay}>{quantity}</span>
-          <button
-            style={styles.quantityButton}
-            onClick={() => handleQuantityChange("increased")}
-            aria-label='Increase quantity'
-          >
-            +
-          </button>
-        </div>
-        {showCartMessage && (
-          <div style={styles.cartMessageBox}>
-            <div style={styles.cartMessageContent}>
-              <img
-                src={image}
-                alt='Product Thumbnail'
-                style={styles.cartMessageImage}
-              />
-              <div style={styles.cartMessageText}>
-                <h3 style={styles.cartMessageTitle}>Added to Cart</h3>
-                <p style={styles.cartMessageQuantity}>Quantity: {quantity}</p>
-              </div>
+    <div className="w-full relative rounded-3xl overflow-hidden max-w-md mx-2 bg-white p-4 my-10 shadow-md">
+      <div className="relative z-10">
+        <Lens hovering={hovering} setHovering={setHovering}>
+          <Link href={`/productdetails`} onClick={handleNavigateToDetails}>
+            <Image
+              src={product.image}
+              alt={product.title}
+              width={500}
+              height={500}
+              className="rounded-2xl"
+              onMouseEnter={() => setHovering(true)}
+              onMouseLeave={() => setHovering(false)}
+            />
+          </Link>
+        </Lens>
+        <motion.div
+          animate={{
+            filter: hovering ? "blur(2px)" : "blur(0px)",
+          }}
+          className="py-4 relative z-20"
+        >
+          <h2 className="text-black text-2xl text-left font-bold">
+            {product.title}
+          </h2>
+          <p className="text-gray-700 text-left mt-4">
+            {product.description}
+          </p>
+
+          {/* Quantity Controls */}
+          <div className="flex flex-col items-center mt-4">
+            <div className="flex items-center mb-2">
               <button
-                style={styles.cartMessageCloseButton}
-                onClick={() => setShowCartMessage(false)}
-                aria-label='Close'
+                onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
+                className="bg-gray-200 text-gray-800 p-4 rounded-md mx-2 text-xl transition-all duration-200 hover:bg-gray-300"
               >
-                &times;
+                -
+              </button>
+              <span className="text-lg font-bold mx-2">{quantity}</span>
+              <button
+                onClick={() => onQuantityChange(quantity + 1)}
+                className="bg-gray-200 text-gray-800 p-4 rounded-md mx-2 text-xl transition-all duration-200 hover:bg-gray-300"
+              >
+                +
               </button>
             </div>
+            <span className="text-gray-500 text-sm">Adjust Quantity</span>
           </div>
-        )}
+
+          {/* Add to Cart and Add to Favorites Buttons */}
+          <div className="flex justify-between items-center mt-4">
+            <button
+              onClick={handleAddToCart}
+              className="flex items-center bg-green-800 text-white p-2 rounded-md shadow-md hover:bg-green-600 transition duration-200"
+            >
+              <FontAwesomeIcon icon={faCartPlus} className="mr-1" />
+              Add to Cart
+            </button>
+            <button onClick={onToggleFavorite} className="text-red-500">
+              <FontAwesomeIcon icon={isFavorite ? faHeartSolid : faHeartRegular} />
+            </button>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
-};
+}
 
-const ProductList: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
+export function LensDemo() {
+  const products: Product[] = [
+    {
+      id: "1", 
+      title: "Apple Vision Pro",
+      description: "The all new Apple Vision Pro was the best thing that happened around 8 months ago, not anymore.",
+      image: "https://shop.realmadrid.com/_next/image?url=https%3A%2F%2Flegends.broadleafcloud.com%2Fapi%2Fasset%2Fcontent%2FRMCFMO0024-01-1.jpg%3FcontextRequest%3D%257B%2522forceCatalogForFetch%2522%3Afalse%2C%2522forceFilterByCatalogIncludeInheritance%2522%3Afalse%2C%2522forceFilterByCatalogExcludeInheritance%2522%3Afalse%2C%2522applicationId%2522%3A%252201H4RD9NXMKQBQ1WVKM1181VD8%2522%2C%2522tenantId%2522%3A%2522REAL_MADRID%2522%257D&w=1920&q=75",
+    },
+    {
+      id: "2", 
+      title: "Samsung Galaxy S23",
+      description: "Experience the next level of smartphone technology with the Samsung Galaxy S23.",
+      image: "https://shop.realmadrid.com/_next/image?url=https%3A%2F%2Flegends.broadleafcloud.com%2Fapi%2Fasset%2Fcontent%2FRMCFMZ0201-1.jpg%3FcontextRequest%3D%257B%2522forceCatalogForFetch%2522%3Afalse%2C%2522forceFilterByCatalogIncludeInheritance%2522%3Afalse%2C%2522forceFilterByCatalogExcludeInheritance%2522%3Afalse%2C%2522applicationId%2522%3A%252201H4RD9NXMKQBQ1WVKM1181VD8%2522%2C%2522tenantId%2522%3A%2522REAL_MADRID%2522%257D&w=3840&q=50",
+    },
+    {
+      id: "3", 
+      title: "Google Pixel 7",
+      description: "Capture stunning photos with the Google Pixel 7's advanced camera system.",
+      image: "https://shop.realmadrid.com/_next/image?url=https%3A%2F%2Flegends.broadleafcloud.com%2Fapi%2Fasset%2Fcontent%2Frmcfmz0196-01.jpg%3FcontextRequest%3D%257B%2522forceCatalogForFetch%2522%3Afalse%2C%2522forceFilterByCatalogIncludeInheritance%2522%3Afalse%2C%2522forceFilterByCatalogExcludeInheritance%2522%3Afalse%2C%2522applicationId%2522%3A%252201H4RD9NXMKQBQ1WVKM1181VD8%2522%2C%2522tenantId%2522%3A%2522REAL_MADRID%2522%257D&w=640&q=50",
+    },
+    {
+      id: "4", 
+      title: "OnePlus 9 Pro",
+      description: "The OnePlus 9 Pro offers fast charging and a sleek design for tech enthusiasts.",
+      image: "https://shop.realmadrid.com/_next/image?url=https%3A%2F%2Flegends.broadleafcloud.com%2Fapi%2Fasset%2Fcontent%2FRMCFMZ0201-1.jpg%3FcontextRequest%3D%257B%2522forceCatalogForFetch%2522%3Afalse%2C%2522forceFilterByCatalogIncludeInheritance%2522%3Afalse%2C%2522forceFilterByCatalogExcludeInheritance%2522%3Afalse%2C%2522applicationId%2522%3A%252201H4RD9NXMKQBQ1WVKM1181VD8%2522%2C%2522tenantId%2522%3A%2522REAL_MADRID%2522%257D&w=3840&q=50",
+    },
+    {
+      id: "5", 
+      title: "Xiaomi Mi 11",
+      description: "Unleash the power of photography with the Xiaomi Mi 11's impressive camera capabilities.",
+      image: "https://shop.realmadrid.com/_next/image?url=https%3A%2F%2Flegends.broadleafcloud.com%2Fapi%2Fasset%2Fcontent%2Frmcfmz0196-01.jpg%3FcontextRequest%3D%257B%2522forceCatalogForFetch%2522%3Afalse%2C%2522forceFilterByCatalogIncludeInheritance%2522%3Afalse%2C%2522forceFilterByCatalogExcludeInheritance%2522%3Afalse%2C%2522applicationId%2522%3A%252201H4RD9NXMKQBQ1WVKM1181VD8%2522%2C%2522tenantId%2522%3A%2522REAL_MADRID%2522%257D&w=640&q=50",
+    },
+  ];
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const [currentPage, setCurrentPage] = useState(0);
+  const productsPerPage = 3; // Set the number of products to display per page
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  
+  // State to manage quantities and favorites for all products
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+  const [favorites, setFavorites] = useState<{ [key: string]: boolean }>({});
+
+  // Calculate the index of the first and last product on the current page
+  const startIndex = currentPage * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const currentProducts = products.slice(startIndex, endIndex);
+
+  const handleNext = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
-  const handleAddToCart = (product: Product, quantity: number) => {
-    // Get existing cart items from local storage
-    const existingCart = localStorage.getItem("cartItems");
-    const cartItems = existingCart ? JSON.parse(existingCart) : [];
-
-    // Add new product to cart items
-    cartItems.push({ ...product, quantity });
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-
-    // Optionally, show a message or update UI
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
-  const currentProducts = products.slice(
-    (currentPage - 1) * PRODUCTS_PER_PAGE,
-    currentPage * PRODUCTS_PER_PAGE
-  );
+  const handleQuantityChange = (productId: string, newQuantity: number) => {
+    setQuantities((prev) => ({ ...prev, [productId]: newQuantity }));
+  };
+
+  const toggleFavorite = (productId: string) => {
+    setFavorites((prev) => ({ ...prev, [productId]: !prev[productId] }));
+  };
 
   return (
-    <div>
-      <div style={styles.productList}>
-        {currentProducts.map((product, index) => (
-          <ProductCard
-            key={index}
-            image={product.image}
-            price={product.price}
-            description={product.description}
-            sizes={product.sizes}
-            colors={product.colors}
-            onAddToCart={handleAddToCart}
-          />
+    <div className="flex flex-col items-center">
+      <div className="flex justify-center flex-wrap">
+        {currentProducts.map((product) => (
+          <ProductCard 
+            key={product.id} 
+            product={product} 
+            quantity={quantities[product.id] || 1} // Pass quantity for the product
+            isFavorite={!!favorites[product.id]} // Pass favorite status for the product
+            onQuantityChange={(newQuantity) => handleQuantityChange(product.id, newQuantity)} // Pass quantity change handler
+            onToggleFavorite={() => toggleFavorite(product.id)} // Pass favorite toggle handler
+          /> 
         ))}
       </div>
-      <div style={styles.pagination}>
-        <button
-          style={styles.pageButton}
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
+      <div className="flex justify-between w-full max-w-md mt-4">
+        <button 
+          onClick={handlePrevious} 
+          disabled={currentPage === 0} 
+          className={`bg-blue-500 text-white p-2 rounded-md ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           Previous
         </button>
-        <span style={styles.pageInfo}>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          style={styles.pageButton}
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
+        <button 
+          onClick={handleNext} 
+          disabled={currentPage >= totalPages - 1} 
+          className={`bg-blue-500 text-white p-2 rounded-md ${currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
           Next
         </button>
       </div>
     </div>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  card: {
-    width: "100%",
-    maxWidth: "300px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    backgroundColor: "#fff",
-    overflow: "hidden",
-    position: "relative",
-    margin: "15px",
-    transition: "transform 0.3s ease",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  link: {
-    textDecoration: "none"
-  },
-  image: {
-    width: "100%",
-    height: "auto"
-  },
-  details: {
-    padding: "15px",
-    width: "100%",
-    boxSizing: "border-box"
-  },
-  price: {
-    fontSize: "1.5em",
-    color: "#333",
-    margin: "0 0 10px",
-    textAlign: "center"
-  },
-  description: {
-    fontSize: "0.9em",
-    color: "#666",
-    margin: "0 0 15px",
-    textAlign: "center"
-  },
-  actions: {
-    display: "flex",
-    justifyContent: "space-between",
-    width: "100%",
-    marginBottom: "10px"
-  },
-  iconButton: {
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    padding: "0",
-    transition: "color 0.3s"
-  },
-  quantity: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "10px",
-    width: "100%"
-  },
-  quantityButton: {
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "4px",
-    padding: "10px 15px",
-    cursor: "pointer",
-    margin: "0 5px",
-    fontSize: "1.2em",
-    lineHeight: "1",
-    textAlign: "center",
-    width: "40px",
-    height: "40px",
-    transition: "background-color 0.3s"
-  },
-  quantityDisplay: {
-    fontSize: "1.2em",
-    margin: "0 10px"
-  },
-  cartMessageBox: {
-    position: "fixed",
-    bottom: "20px",
-    right: "20px",
-    backgroundColor: "#333",
-    color: "#fff",
-    padding: "15px 20px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-    display: "flex",
-    alignItems: "center",
-    zIndex: 1000,
-    animation: "slideInOut 4s ease-out"
-  },
-  cartMessageContent: {
-    display: "flex",
-    alignItems: "center",
-    width: "100%"
-  },
-  cartMessageImage: {
-    width: "50px",
-    height: "50px",
-    borderRadius: "4px",
-    marginRight: "15px"
-  },
-  cartMessageText: {
-    flex: 1
-  },
-  cartMessageTitle: {
-    fontSize: "1.1em",
-    margin: "0 0 5px"
-  },
-  cartMessageQuantity: {
-    fontSize: "0.9em",
-    margin: "0"
-  },
-  cartMessageCloseButton: {
-    background: "none",
-    border: "none",
-    color: "#fff",
-    fontSize: "1.5em",
-    cursor: "pointer",
-    padding: "0 5px",
-    transition: "color 0.3s"
-  },
-  productList: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center"
-  },
-  pagination: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "20px"
-  },
-  pageButton: {
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "4px",
-    padding: "10px 15px",
-    cursor: "pointer",
-    margin: "0 5px",
-    fontSize: "1em",
-    lineHeight: "1",
-    textAlign: "center",
-    transition: "background-color 0.3s"
-  },
-  pageInfo: {
-    display: "flex",
-    alignItems: "center",
-    margin: "0 10px"
-  },
-  "@keyframes slideInOut": {
-    "0%": {
-      opacity: 0,
-      transform: "translateY(100%)"
-    },
-    "10%": {
-      opacity: 1,
-      transform: "translateY(0)"
-    },
-    "90%": {
-      opacity: 1,
-      transform: "translateY(0)"
-    },
-    "100%": {
-      opacity: 0,
-      transform: "translateY(100%)"
-    }
-  },
-  "@media (max-width: 768px)": {
-    card: {
-      width: "90%",
-      maxWidth: "none",
-      margin: "10px"
-    }
-  },
-  "@media (max-width: 480px)": {
-    card: {
-      width: "100%",
-      margin: "5px"
-    },
-    price: {
-      fontSize: "1.2em"
-    },
-    description: {
-      fontSize: "0.8em"
-    },
-    iconButton: {
-      padding: "5px"
-    },
-    quantityButton: {
-      padding: "5px 8px"
-    },
-    cartMessageBox: {
-      bottom: "10px",
-      right: "10px",
-      padding: "10px 15px"
-    },
-    cartMessageImage: {
-      width: "40px",
-      height: "40px"
-    },
-    cartMessageTitle: {
-      fontSize: "1em"
-    },
-    cartMessageQuantity: {
-      fontSize: "0.8em"
-    },
-    cartMessageCloseButton: {
-      fontSize: "1.2em"
-    }
-  }
-};
-
-export default ProductList;
+}

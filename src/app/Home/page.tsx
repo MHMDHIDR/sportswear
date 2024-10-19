@@ -1,15 +1,16 @@
 import Footer from "../components/footer";
-import ImageSlider from "../components/image-slider";
+import { ImagesSliderDemo } from "../components/imagesSlider";
 import Navbar from "../components/menu";
-import ProductList from "../components/productCard";
+import { LensDemo } from "../components/productCard";
+
 
 export default function HomePage() {
   return (
     <>
       <Navbar />
-      <ImageSlider />
+      <ImagesSliderDemo />
       <main style={styles.main}>
-        <ProductList />
+        <LensDemo />
       </main>
       <Footer />
     </>
