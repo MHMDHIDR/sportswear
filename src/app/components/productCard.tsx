@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import Link from "next/link";
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 type Product = {
   id: string; // Add an id field
@@ -185,22 +186,32 @@ export function LensDemo() {
           /> 
         ))}
       </div>
-      <div className="flex justify-between w-full max-w-md mt-4">
-        <button 
-          onClick={handlePrevious} 
-          disabled={currentPage === 0} 
-          className={`bg-blue-500 text-white p-2 rounded-md ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          Previous
-        </button>
-        <button 
-          onClick={handleNext} 
-          disabled={currentPage >= totalPages - 1} 
-          className={`bg-blue-500 text-white p-2 rounded-md ${currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          Next
-        </button>
-      </div>
+      <div className="flex justify-between items-center w-full max-w-md mt-4">
+  {/* Previous Button */}
+  <button
+    onClick={handlePrevious}
+    disabled={currentPage === 0}
+    className={`w-12 h-12 bg-gray-500 text-white rounded-full flex justify-center items-center shadow-md transition duration-200 
+      ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-400'}`}
+  >
+    <FontAwesomeIcon icon={faArrowLeft} size="lg" />
+  </button>
+
+  {/* Page Indicator */}
+  <span className="text-lg font-bold">
+    {currentPage + 1} / {totalPages}
+  </span>
+
+  {/* Next Button */}
+  <button
+    onClick={handleNext}
+    disabled={currentPage >= totalPages - 1}
+    className={`w-12 h-12 bg-gray-500 text-white rounded-full flex justify-center items-center shadow-md transition duration-200 
+      ${currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-400'}`}
+  >
+    <FontAwesomeIcon icon={faArrowRight} size="lg" />
+  </button>
+</div>
     </div>
   );
 }

@@ -14,6 +14,24 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'w7.pngwing.com',  // Existing hostname
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static-00.iconduck.com',  // Existing hostname
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.aceternity.com',  // Add the new hostname here
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
