@@ -15,6 +15,9 @@ import Image from "next/image";
 import { cn } from "../lib/utils";
 import Categories from "../dashboard/dashboard-components/categories";
 import UsersControl from "../dashboard/dashboard-components/users";
+import Orders from "../dashboard/dashboard-components/orders";
+import Items from "../dashboard/dashboard-components/items";
+import ContactInformation from "../dashboard/dashboard-components/contactInformation";
 
 
 // Main SidebarDemo Component
@@ -74,6 +77,8 @@ export function SidebarDemo() {
         return <Categories />;
       case "Users":
         return <UsersControl />;
+        case "Orders":
+          return <Orders />;
         case "Items": 
         return <Items />;
       case "Contact Information":
@@ -162,12 +167,7 @@ export const Logo = () => (
   </Link>
 );
 
-const ContactInformation = () => (
-  <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
-    <h1 className="text-2xl font-semibold">Contact Information</h1>
-    <p>This is the contact information page.</p>
-  </div>
-);
+
 
 const AboutUs = () => (
   <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
@@ -176,9 +176,3 @@ const AboutUs = () => (
   </div>
 );
 
-const Items = () => (
-    <div className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
-      <h1 className="text-2xl font-semibold">Items</h1>
-      <p>This is the items page.</p>
-    </div>
-  );
