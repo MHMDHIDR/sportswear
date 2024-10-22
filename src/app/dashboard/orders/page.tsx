@@ -1,6 +1,8 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 // Define the Order type
 type Order = {
@@ -12,7 +14,7 @@ type Order = {
   delivered: boolean;
 };
 
-export default function Orders() {
+export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   // Mock fetch function to simulate fetching orders from an API
@@ -58,8 +60,8 @@ export default function Orders() {
   }, []);
 
   const handleToggleDelivery = (id: number) => {
-    setOrders((prevOrders) =>
-      prevOrders.map((order) =>
+    setOrders(prevOrders =>
+      prevOrders.map(order =>
         order.id === id ? { ...order, delivered: !order.delivered } : order
       )
     );
@@ -82,11 +84,8 @@ export default function Orders() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr
-                key={order.id}
-                className="hover:bg-gray-50 dark:hover:bg-neutral-700"
-              >
+            {orders.map(order => (
+              <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-neutral-700">
                 <td className="border border-neutral-300 p-3">{order.customerName}</td>
                 <td className="border border-neutral-300 p-3">{order.productName}</td>
                 <td className="border border-neutral-300 p-3">{order.quantity}</td>

@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+"use client";
+
+import { useState, useEffect } from "react";
 
 // Define the Item type
 type Item = {
@@ -11,15 +13,15 @@ type Item = {
   photos: string[]; // Array to store photo URLs
 };
 
-export default function Items() {
+export default function ItemsPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [newItem, setNewItem] = useState<Item>({
     id: 0,
-    name: '',
-    category: '',
+    name: "",
+    category: "",
     price: 0,
     stock: 0,
-    description: '',
+    description: "",
     photos: [],
   });
   const [editingItem, setEditingItem] = useState<Item | null>(null);
@@ -30,30 +32,30 @@ export default function Items() {
     setItems([
       {
         id: 1,
-        name: 'Running Shoes',
-        category: 'Footwear',
+        name: "Running Shoes",
+        category: "Footwear",
         price: 120,
         stock: 50,
-        description: 'Comfortable running shoes',
-        photos: ['https://via.placeholder.com/100'],
+        description: "Comfortable running shoes",
+        photos: ["https://via.placeholder.com/100"],
       },
       {
         id: 2,
-        name: 'Yoga Mat',
-        category: 'Accessories',
+        name: "Yoga Mat",
+        category: "Accessories",
         price: 30,
         stock: 100,
-        description: 'Non-slip yoga mat',
-        photos: ['https://via.placeholder.com/100'],
+        description: "Non-slip yoga mat",
+        photos: ["https://via.placeholder.com/100"],
       },
       {
         id: 3,
-        name: 'Training Jacket',
-        category: 'Clothing',
+        name: "Training Jacket",
+        category: "Clothing",
         price: 60,
         stock: 20,
-        description: 'Lightweight jacket for workouts',
-        photos: ['https://via.placeholder.com/100'],
+        description: "Lightweight jacket for workouts",
+        photos: ["https://via.placeholder.com/100"],
       },
     ]);
   };
@@ -77,11 +79,11 @@ export default function Items() {
   const resetNewItem = () => {
     setNewItem({
       id: 0,
-      name: '',
-      category: '',
+      name: "",
+      category: "",
       price: 0,
       stock: 0,
-      description: '',
+      description: "",
       photos: [],
     });
     setPhotoFiles([]);
@@ -94,10 +96,8 @@ export default function Items() {
 
   const handleUpdateItem = () => {
     if (editingItem) {
-      setItems((prevItems) =>
-        prevItems.map((item) =>
-          item.id === editingItem.id ? editingItem : item
-        )
+      setItems(prevItems =>
+        prevItems.map(item => (item.id === editingItem.id ? editingItem : item))
       );
       setEditingItem(null);
       setPhotoFiles([]);
@@ -105,7 +105,7 @@ export default function Items() {
   };
 
   const handleDeleteItem = (id: number) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    setItems(prevItems => prevItems.filter(item => item.id !== id));
   };
 
   const handleInputChange = (field: keyof Item, value: string | number) => {
@@ -120,7 +120,7 @@ export default function Items() {
       const filesArray = Array.from(e.target.files);
       const newFiles = filesArray.slice(0, 5); // Limit to 5 photos
       setPhotoFiles(newFiles);
-      const photoURLs = newFiles.map((file) => URL.createObjectURL(file));
+      const photoURLs = newFiles.map(file => URL.createObjectURL(file));
       if (editingItem) {
         setEditingItem({
           ...editingItem,
@@ -153,34 +153,34 @@ export default function Items() {
           type="text"
           placeholder="Product Name"
           value={newItem.name}
-          onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+          onChange={e => setNewItem({ ...newItem, name: e.target.value })}
           className="border rounded-md p-2"
         />
         <input
           type="text"
           placeholder="Category"
           value={newItem.category}
-          onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
+          onChange={e => setNewItem({ ...newItem, category: e.target.value })}
           className="border rounded-md p-2"
         />
         <input
           type="number"
           placeholder="Price"
           value={newItem.price}
-          onChange={(e) => setNewItem({ ...newItem, price: Number(e.target.value) })}
+          onChange={e => setNewItem({ ...newItem, price: Number(e.target.value) })}
           className="border rounded-md p-2"
         />
         <input
           type="number"
           placeholder="Stock"
           value={newItem.stock}
-          onChange={(e) => setNewItem({ ...newItem, stock: Number(e.target.value) })}
+          onChange={e => setNewItem({ ...newItem, stock: Number(e.target.value) })}
           className="border rounded-md p-2"
         />
         <textarea
           placeholder="Description"
           value={newItem.description}
-          onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
+          onChange={e => setNewItem({ ...newItem, description: e.target.value })}
           className="border rounded-md p-2 col-span-1 md:col-span-2"
         ></textarea>
         <input
@@ -213,14 +213,14 @@ export default function Items() {
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
+            {items.map(item => (
               <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-neutral-700">
                 <td className="border border-neutral-300 p-2">
                   {editingItem?.id === item.id ? (
                     <input
                       type="text"
                       value={editingItem.name}
-                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      onChange={e => handleInputChange("name", e.target.value)}
                       className="border rounded-md p-1 w-full"
                     />
                   ) : (
@@ -232,7 +232,7 @@ export default function Items() {
                     <input
                       type="text"
                       value={editingItem.category}
-                      onChange={(e) => handleInputChange('category', e.target.value)}
+                      onChange={e => handleInputChange("category", e.target.value)}
                       className="border rounded-md p-1 w-full"
                     />
                   ) : (
@@ -244,7 +244,7 @@ export default function Items() {
                     <input
                       type="number"
                       value={editingItem.price}
-                      onChange={(e) => handleInputChange('price', Number(e.target.value))}
+                      onChange={e => handleInputChange("price", Number(e.target.value))}
                       className="border rounded-md p-1 w-full"
                     />
                   ) : (
@@ -256,7 +256,7 @@ export default function Items() {
                     <input
                       type="number"
                       value={editingItem.stock}
-                      onChange={(e) => handleInputChange('stock', Number(e.target.value))}
+                      onChange={e => handleInputChange("stock", Number(e.target.value))}
                       className="border rounded-md p-1 w-full"
                     />
                   ) : (
@@ -267,7 +267,7 @@ export default function Items() {
                   {editingItem?.id === item.id ? (
                     <textarea
                       value={editingItem.description}
-                      onChange={(e) => handleInputChange('description', e.target.value)}
+                      onChange={e => handleInputChange("description", e.target.value)}
                       className="border rounded-md p-1 w-full"
                     ></textarea>
                   ) : (
@@ -278,7 +278,11 @@ export default function Items() {
                   <div className="flex flex-wrap gap-2">
                     {item.photos.map((photo, index) => (
                       <div key={index} className="relative">
-                        <img src={photo} alt={`Photo ${index + 1}`} className="w-20 h-20 object-cover rounded-md" />
+                        <img
+                          src={photo}
+                          alt={`Photo ${index + 1}`}
+                          className="w-20 h-20 object-cover rounded-md"
+                        />
                         {editingItem?.id === item.id && (
                           <button
                             onClick={() => handleRemovePhoto(index)}

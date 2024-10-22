@@ -1,8 +1,6 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation"; // For navigation
-import Dashboard from "@/app/components/control";
-
 
 export default function Control() {
   const router = useRouter(); // Initialize router
@@ -36,7 +34,7 @@ export default function Control() {
         <h1 className="text-4xl font-bold">Control Page</h1>
       </div>
       <div className="flex flex-1">
-       <Dashboard />
+        <h1>Welcome to the Control Page. You can add, edit, delete, and view</h1>
       </div>
     </div>
   );

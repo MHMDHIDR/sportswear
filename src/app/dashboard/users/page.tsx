@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+"use client";
+
+import { useState, useEffect } from "react";
 
 // Define the User type
 type User = {
@@ -10,16 +12,44 @@ type User = {
   isActive: boolean;
 };
 
-export default function UsersControl() {
+export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
 
   // Mock fetch function to simulate fetching users from an API
   const fetchUsers = () => {
     setUsers([
-      { id: 1, fullName: "John Doe", phoneNumber: "+123456789", country: "USA", email: "john@example.com", isActive: true },
-      { id: 2, fullName: "Jane Smith", phoneNumber: "+987654321", country: "Canada", email: "jane@example.com", isActive: true },
-      { id: 3, fullName: "Alice Johnson", phoneNumber: "+112233445", country: "UK", email: "alice@example.com", isActive: false },
-      { id: 4, fullName: "Bob Brown", phoneNumber: "+556677889", country: "Australia", email: "bob@example.com", isActive: true },
+      {
+        id: 1,
+        fullName: "John Doe",
+        phoneNumber: "+123456789",
+        country: "USA",
+        email: "john@example.com",
+        isActive: true,
+      },
+      {
+        id: 2,
+        fullName: "Jane Smith",
+        phoneNumber: "+987654321",
+        country: "Canada",
+        email: "jane@example.com",
+        isActive: true,
+      },
+      {
+        id: 3,
+        fullName: "Alice Johnson",
+        phoneNumber: "+112233445",
+        country: "UK",
+        email: "alice@example.com",
+        isActive: false,
+      },
+      {
+        id: 4,
+        fullName: "Bob Brown",
+        phoneNumber: "+556677889",
+        country: "Australia",
+        email: "bob@example.com",
+        isActive: true,
+      },
     ]);
   };
 
@@ -28,8 +58,8 @@ export default function UsersControl() {
   }, []);
 
   const handleToggleUser = (id: number) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
+    setUsers(prevUsers =>
+      prevUsers.map(user =>
         user.id === id ? { ...user, isActive: !user.isActive } : user
       )
     );
@@ -52,23 +82,31 @@ export default function UsersControl() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map(user => (
               <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-neutral-700">
                 <td className="border border-neutral-300 p-2">{user.fullName}</td>
                 <td className="border border-neutral-300 p-2">{user.phoneNumber}</td>
                 <td className="border border-neutral-300 p-2">{user.country}</td>
                 <td className="border border-neutral-300 p-2">{user.email}</td>
                 <td className="border border-neutral-300 p-2">
-                  <span className={`font-semibold ${user.isActive ? 'text-green-600' : 'text-red-600'}`}>
-                    {user.isActive ? 'Active' : 'Blocked'}
+                  <span
+                    className={`font-semibold ${
+                      user.isActive ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {user.isActive ? "Active" : "Blocked"}
                   </span>
                 </td>
                 <td className="border border-neutral-300 p-2 text-center">
                   <button
                     onClick={() => handleToggleUser(user.id)}
-                    className={`py-1 px-3 rounded-md text-white ${user.isActive ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}`}
+                    className={`py-1 px-3 rounded-md text-white ${
+                      user.isActive
+                        ? "bg-red-500 hover:bg-red-600"
+                        : "bg-green-500 hover:bg-green-600"
+                    }`}
                   >
-                    {user.isActive ? 'Block' : 'Activate'}
+                    {user.isActive ? "Block" : "Activate"}
                   </button>
                 </td>
               </tr>

@@ -1,10 +1,17 @@
-import React, { useState, useRef } from 'react';
-import { GoogleMap, LoadScript, Marker, StandaloneSearchBox } from '@react-google-maps/api';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+"use client";
+
+import React, { useState, useRef } from "react";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  StandaloneSearchBox,
+} from "@react-google-maps/api";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const containerStyle = {
-  width: '100%',
-  height: '300px',
+  width: "100%",
+  height: "300px",
 };
 
 const center = {
@@ -12,16 +19,16 @@ const center = {
   lng: -38.523, // Default longitude
 };
 
-export default function ContactInformation() {
-  const [phone, setPhone] = useState('123-456-7890');
-  const [email, setEmail] = useState('example@example.com');
+export default function ContactInformationPage() {
+  const [phone, setPhone] = useState("123-456-7890");
+  const [email, setEmail] = useState("example@example.com");
   const [location, setLocation] = useState(center);
-  const [address, setAddress] = useState('Location');
+  const [address, setAddress] = useState("Location");
   const [socialMediaLinks, setSocialMediaLinks] = useState({
-    facebook: '',
-    twitter: '',
-    instagram: '',
-    linkedin: '',
+    facebook: "",
+    twitter: "",
+    instagram: "",
+    linkedin: "",
   });
 
   const searchBoxRef = useRef<any>(null); // Reference for the search box
@@ -51,7 +58,7 @@ export default function ContactInformation() {
         <input
           type="text"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={e => setPhone(e.target.value)}
           className="border rounded-md p-1 md:w-1/2"
         />
       </div>
@@ -62,7 +69,7 @@ export default function ContactInformation() {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
           className="border rounded-md p-1 md:w-1/2"
         />
       </div>
@@ -72,17 +79,10 @@ export default function ContactInformation() {
         <label className="text-lg">Location:</label>
         <LoadScript
           googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY" // Replace with your actual API key
-          libraries={['places']} // Ensure places library is loaded
+          libraries={["places"]} // Ensure places library is loaded
         >
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={location}
-            zoom={10}
-          >
-            <StandaloneSearchBox
-              onPlacesChanged={handlePlacesChanged}
-              ref={searchBoxRef}
-            >
+          <GoogleMap mapContainerStyle={containerStyle} center={location} zoom={10}>
+            <StandaloneSearchBox onPlacesChanged={handlePlacesChanged} ref={searchBoxRef}>
               <input
                 type="text"
                 placeholder="Search for a location..."
@@ -105,7 +105,7 @@ export default function ContactInformation() {
               type="text"
               placeholder="Facebook Link"
               value={socialMediaLinks.facebook}
-              onChange={(e) => handleUpdateSocialMedia('facebook', e.target.value)}
+              onChange={e => handleUpdateSocialMedia("facebook", e.target.value)}
               className="border rounded-md p-1 w-full"
             />
           </div>
@@ -115,7 +115,7 @@ export default function ContactInformation() {
               type="text"
               placeholder="Twitter Link"
               value={socialMediaLinks.twitter}
-              onChange={(e) => handleUpdateSocialMedia('twitter', e.target.value)}
+              onChange={e => handleUpdateSocialMedia("twitter", e.target.value)}
               className="border rounded-md p-1 w-full"
             />
           </div>
@@ -125,7 +125,7 @@ export default function ContactInformation() {
               type="text"
               placeholder="Instagram Link"
               value={socialMediaLinks.instagram}
-              onChange={(e) => handleUpdateSocialMedia('instagram', e.target.value)}
+              onChange={e => handleUpdateSocialMedia("instagram", e.target.value)}
               className="border rounded-md p-1 w-full"
             />
           </div>
@@ -135,7 +135,7 @@ export default function ContactInformation() {
               type="text"
               placeholder="LinkedIn Link"
               value={socialMediaLinks.linkedin}
-              onChange={(e) => handleUpdateSocialMedia('linkedin', e.target.value)}
+              onChange={e => handleUpdateSocialMedia("linkedin", e.target.value)}
               className="border rounded-md p-1 w-full"
             />
           </div>
